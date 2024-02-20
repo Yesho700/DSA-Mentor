@@ -1,0 +1,54 @@
+class Solution {
+    public class Pair{
+        int no;
+        int freq;
+        Pair(int no, int freq)
+        {
+            this.no = no;
+            this.freq = freq;
+        }
+    }
+
+    public class Hello implements Comparator<Pair>{
+        public int compare(Pair a, Pair b)
+        {
+            return a.freq - b.freq;
+        }
+    }
+    public int[] topKFrequent(int[] nums, int k) {
+        int n = nums.length;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i=0; i<n; i++)
+        {
+            if(!map.containsKey(nums[i]))
+                map.put(nums[i],1);
+            else
+                map.put(nums[i], map.get(nums[i])+1);
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>(map.size(), new Hello());
+        List<Integer> del = new ArrayList<>();
+        for(int key : map.keySet())
+        {
+           if(pq.size()<k)
+            {
+                pq.add(new Pair(key, map.get(key)));
+            }
+            else
+            {
+                pq.add(new Pair(key, map.get(key)));
+                Pair p = pq.poll();
+            }
+        }
+
+        int[] ans = new int[k];
+        int j = 0;
+        while(pq.size() != 0)
+        {
+            ans[j] = pq.poll().no;
+            j++;
+        }
+
+        return ans;
+    }
+}
