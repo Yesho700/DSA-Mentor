@@ -1,0 +1,20 @@
+class Solution {
+    int val = 0;
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if(head == null)
+        {
+            val++;
+            return head;
+        }
+        
+        ListNode ret = removeNthFromEnd(head.next, n);
+        if(n == val)
+        {
+            val++;
+            return ret;
+        }
+        head.next = ret;
+        val++;
+        return head;
+    }
+}
