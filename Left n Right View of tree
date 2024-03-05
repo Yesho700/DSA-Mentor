@@ -1,0 +1,59 @@
+// LEFT VIEW OF A TREE
+
+class Tree
+{
+    //Function to return list containing elements of left view of binary tree.
+    HashMap<Integer, Integer> map = new HashMap<>();
+    void fun(Node root, int lvl)
+    {
+        if(root == null)
+            return;
+        if(!map.containsKey(lvl))
+            map.put(lvl, root.data);
+            
+        fun(root.left, lvl+1);
+        fun(root.right, lvl+1);
+    }
+    ArrayList<Integer> leftView(Node root)
+    {
+        
+      // Your code herege
+      fun(root, 0);
+      ArrayList<Integer> ans = new ArrayList<>();
+      for(int k : map.keySet())
+      {
+          ans.add(map.get(k));
+      }
+      return ans;
+    }
+}
+
+// RIGHT VIEW OF A TREE
+
+class Tree
+{
+    //Function to return list containing elements of left view of binary tree.
+    HashMap<Integer, Integer> map = new HashMap<>();
+    void fun(Node root, int lvl)
+    {
+        if(root == null)
+            return;
+        if(!map.containsKey(lvl))
+            map.put(lvl, root.data);
+
+        fun(root.right, lvl+1);
+        fun(root.left, lvl+1);
+    }
+    ArrayList<Integer> leftView(Node root)
+    {
+        
+      // Your code herege
+      fun(root, 0);
+      ArrayList<Integer> ans = new ArrayList<>();
+      for(int k : map.keySet())
+      {
+          ans.add(map.get(k));
+      }
+      return ans;
+    }
+}
