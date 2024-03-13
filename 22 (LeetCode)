@@ -1,0 +1,29 @@
+
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        if(n == 1)
+        {
+            List<String> res = new ArrayList<>();
+            res.add("()");
+            return res;
+        }
+
+        List<String> temp = generateParenthesis(n-1);
+        List<String> str = new ArrayList<>();
+        for(String s : temp)
+        {
+            str.add("()"+s);
+            for(int k=0; k<s.length(); k++)
+            {
+                if(s.charAt(k) == '(')
+                {
+                    str.add(s.substring(0, k+1)+"()"+s.substring(k+1));
+                }
+                else
+                    break;
+            }
+        }
+        return str;
+    }
+}
