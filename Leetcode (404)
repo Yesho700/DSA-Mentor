@@ -1,0 +1,22 @@
+// Sum of Left Leaves
+
+class Solution {
+    Stack<TreeNode> parent = new Stack<>();
+    public int sumOfLeftLeaves(TreeNode root) {
+        if(root == null)
+            return 0;
+        if(root.left == null && root.right == null)
+        {
+            if(!parent.isEmpty() && parent.peek().left == root)
+                return root.val;
+            else
+                return 0;
+        }
+
+        parent.push(root);
+        int left = sumOfLeftLeaves(root.left);
+        int right = sumOfLeftLeaves(root.right);
+        parent.pop();
+        return left+right;
+    }
+}
