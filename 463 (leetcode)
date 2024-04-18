@@ -1,0 +1,39 @@
+
+
+class Solution {
+    private int fun(int i, int j, int n, int m, int[][] grid, int[][] visit)
+    {
+        if(i < 0 || j < 0 || i >= n || j >= m)
+            return 1;
+        
+        if(visit[i][j] == 1)
+            return 0;
+        if(grid[i][j] == 0)
+            return 1;
+        visit[i][j] = 1;
+        int ans = 0;
+        int w = fun(i+1, j, n, m, grid, visit);
+        int x = fun(i-1, j, n, m, grid, visit);
+        int y = fun(i, j+1, n, m, grid, visit);
+        int z = fun(i, j-1, n, m, grid, visit);
+        
+        ans = w+x+y+z;
+        return ans;
+    }
+    public int islandPerimeter(int[][] grid) {
+        
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int[][] visit = new int[n][m];
+
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<m; j++){
+                if(grid[i][j] == 1)
+                    return fun(i, j, n, m, grid, visit);
+            }
+        }
+        return 0;
+    }
+}
