@@ -1,0 +1,99 @@
+
+
+class Solution {
+
+    class Pair{
+        int x;
+        int y;  
+
+        Pair(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+
+    private Pair fun(int i, int j, int m, int n, int[][] land, int[][] vis)
+    {
+        if(i < 0 || j < 0 || i >= m || j >= n)
+            return null;
+    
+        // Need to check
+        if(vis[i][j] == 1)
+            return null;
+
+        if(land[i][j] == 0)
+            return null;
+
+        vis[i][j] = 1;
+
+        Pair w = fun(i, j+1, m, n, land, vis);
+        Pair x = fun(i, j-1, m, n, land, vis);
+        Pair y = fun(i+1, j, m, n, land, vis);
+        Pair z = fun(i-1, j, m, n, land, vis);
+
+        int imax = 0;
+        int jmax = 0;
+
+        if(w != null)
+        {
+            imax = Math.max(imax, w.x);
+            jmax = Math.max(jmax, w.y);
+        }
+        if(x != null)
+        {
+            imax = Math.max(imax, x.x);
+            jmax = Math.max(jmax, x.y);
+        }
+        if(y != null)
+        {
+            imax = Math.max(imax, y.x);
+            jmax = Math.max(jmax, y.y);
+        }
+        if(z != null)
+        {
+            imax = Math.max(imax, z.x);
+            jmax = Math.max(jmax, z.y);
+        }
+
+        return new Pair(Math.max(i, imax), Math.max(j, jmax));
+        
+    }
+    public int[][] findFarmland(int[][] land) {
+        int m = land.length;
+        int n = land[0].length;
+
+        int[][] vis = new int[m][n];
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> li = new ArrayList<>();
+
+        for(int i=0; i<m; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                if(land[i][j] == 1 && vis[i][j] == 0)
+                {
+                    li.clear();
+                    li.add(i);
+                    li.add(j);
+                    Pair p = fun(i, j, m, n, land, vis);
+                    li.add(p.x);
+                    li.add(p.y);
+                    res.add(new ArrayList<>(li));
+                }
+            }
+        }
+
+        int[][] ans = new int[res.size()][4];
+        for(int i=0; i<res.size(); i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                ans[i][j] = res.get(i).get(j);
+            }
+        }
+        
+        return ans;
+    }
+}
