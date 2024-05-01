@@ -1,0 +1,28 @@
+class Solution {
+    public int maximumPopulation(int[][] logs) {
+        int[] arr = new int[101];
+
+        for(int i=0; i<logs.length; i++)
+        {
+            int bd = logs[i][0];
+            int dd = logs[i][1];
+
+            arr[bd-1950]+=1;
+            arr[dd-1950]-=1;
+        }
+
+        int maxi = 0;
+        int max = arr[0];
+        for(int i=1; i<101; i++)
+        {
+            arr[i] += arr[i-1];
+            if(arr[i] > max)
+            {
+                max = arr[i];
+                maxi = i;
+            }
+        }
+
+        return maxi+1950;
+    }
+}
