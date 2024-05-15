@@ -1,0 +1,132 @@
+// class Solution {
+//     public double mincostToHireWorkers(int[] quality, int[] minWage, int k) {
+//         int n = minWage.length;
+//         double res = Integer.MAX_VALUE;
+//         for(int manager=0; manager<n; manager++){
+//             PriorityQueue<Double> pq = new PriorityQueue<>(Collections.reverseOrder());
+//             for(int worker=0; worker<n; worker++){
+//                 double ratio = (quality[worker]*1.0)/quality[manager];
+//                 double wage = ratio*minWage[manager];
+//                 if(wage >= minWage[worker]){
+//                     pq.add(wage);
+//                     if(pq.size() > k){
+//                         pq.poll();
+//                     }
+//                 }
+//             }
+//             if(pq.size() < k)
+//                 continue;
+            
+//             double sWage = 0;
+//             while(!pq.isEmpty())
+//                 sWage += pq.poll();
+//             res = Math.min(res, sWage);
+//         }
+//         return res;
+//     }
+// }
+
+
+// class Solution {
+//     public class Pair{
+//         double ratio;
+//         int quality;
+//         Pair(double ratio, int quality){
+//             this.ratio = ratio;
+//             this.quality = quality;
+//         }
+//     }
+//     public class hello implements Comparator<Pair>{
+//         public int compare(Pair a, Pair b){
+//             if(a.ratio < b.ratio)   
+//                 return -1;
+//             else if(a.ratio > b.ratio)
+//                 return 1;
+//             else
+//                 return 0;
+//         }
+//     }
+//     public double mincostToHireWorkers(int[] quality, int[] minWage, int k) {
+//         int n = minWage.length;
+//         double res = Integer.MAX_VALUE;
+        
+//         List<Pair> ratioSal2Qual = new ArrayList<>();
+//         for(int i=0; i<n; i++)
+//         {
+//             double ratio = (minWage[i]*1.0)/quality[i];
+//             ratioSal2Qual.add(new Pair(ratio, quality[i]));
+//         }
+//         Collections.sort(ratioSal2Qual, new hello());
+
+//         for(int i=k-1; i<n; i++)
+//         {
+//             PriorityQueue<Double> pq = new PriorityQueue<>(Collections.reverseOrder());
+//             double ratio = ratioSal2Qual.get(i).ratio;
+//             for(int j=0; j<=i; j++){
+//                 double wage = ratio*ratioSal2Qual.get(j).quality;
+//                 pq.add(wage);
+//                 if(pq.size() > k)
+//                     pq.poll();
+//             }
+//             double sWage = 0;
+//             while(!pq.isEmpty())
+//                 sWage += pq.poll();
+//             res = Math.min(res, sWage);
+//         }
+//         return res;
+//     }
+// }
+
+class Solution {
+    public class Pair{
+        double ratio;
+        int quality;
+        Pair(double ratio, int quality){
+            this.ratio = ratio;
+            this.quality = quality;
+        }
+    }
+    public class hello implements Comparator<Pair>{
+        public int compare(Pair a, Pair b){
+            if(a.ratio < b.ratio)   
+                return -1;
+            else if(a.ratio > b.ratio)
+                return 1;
+            else
+                return 0;
+        }
+    }
+    public double mincostToHireWorkers(int[] quality, int[] minWage, int k) {
+        int n = minWage.length;
+    
+        List<Pair> ratioSal2Qual = new ArrayList<>();
+        for(int i=0; i<n; i++)
+        {
+            double ratio = (minWage[i]*1.0)/quality[i];
+            ratioSal2Qual.add(new Pair(ratio, quality[i]));
+        }
+        Collections.sort(ratioSal2Qual, new hello());
+
+        int sumQuality = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for(int i=0; i<k; i++)
+        {
+            int qual = ratioSal2Qual.get(i).quality;
+            pq.add(qual);
+            sumQuality += qual;
+        }
+
+        double res = ratioSal2Qual.get(k-1).ratio*sumQuality;
+
+        for(int i=k; i<n; i++){
+            int qual = ratioSal2Qual.get(i).quality;
+            double ratio = ratioSal2Qual.get(i).ratio;
+            sumQuality += qual;
+            pq.add(qual);
+            sumQuality -= pq.poll();
+            double wage = ratioSal2Qual.get(i).ratio*sumQuality;
+            res = Math.min(res, wage);
+        }
+        return res;
+    }
+}
