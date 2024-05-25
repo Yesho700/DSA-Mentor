@@ -1,0 +1,111 @@
+// BackTracking Solution
+
+// class Solution {
+//     private void fun(int i, int n, String s, String temp, List<String> str, Set<String> set)
+//     {
+//         if(i >= n)
+//         {
+//             str.add(temp);
+//             return;
+//         }
+
+//         for(int j=i; j<n; j++)
+//         {
+//             String x = s.substring(i, j+1);
+//             if(set.contains(x))
+//             {
+//                 String t = temp;
+//                 if(temp.length() != 0)
+//                     temp += " ";
+//                 temp += x;
+//                 fun(j+1, n, s, temp, str, set);
+//                 temp = t;
+//             }
+//         }
+//     }
+//     public List<String> wordBreak(String s, List<String> wordDict) {
+//         Set<String> set = new HashSet<>(wordDict);
+//         List<String> str = new ArrayList<>();
+//         fun(0, s.length(), s, "", str, set);
+//         return str;
+//     }
+// }
+
+
+// Head Recurrsion Solution
+
+// class Solution {
+//     private List<String> fun(String s, Set<String> set)
+//     {
+//         if(s.length() == 0)
+//         {
+//             List<String> res = new ArrayList<>();
+//             res.add("");
+//             return res;
+//         }
+
+//         List<String> ans = new ArrayList<>();
+//         for(int i=0; i<s.length(); i++)
+//         {
+//             String currWord = s.substring(0, i+1);
+//             if(set.contains(currWord))
+//             {
+//                 List<String> ret = fun(s.substring(i+1), set);
+//                 for(String w : ret)
+//                 {
+//                     if(w.length() == 0)
+//                         ans.add(currWord);
+//                     else
+//                         ans.add(currWord+" "+w);
+//                 }
+//             }
+//         }
+//         return ans;
+//     }
+//     public List<String> wordBreak(String s, List<String> wordDict) {
+//         Set<String> set = new HashSet<>(wordDict);
+//         List<String> str = new ArrayList<>();
+//         return fun(s, set);
+//     }
+// }
+
+//Memoization
+class Solution {
+    Map<String, List<String>> map = new HashMap<>();
+    private List<String> fun(String s, Set<String> set)
+    {
+        if(s.length() == 0)
+        {
+            List<String> res = new ArrayList<>();
+            res.add("");
+            return res;
+        }
+
+        if(map.containsKey(s))
+            return map.get(s);
+
+        List<String> ans = new ArrayList<>();
+        for(int i=0; i<s.length(); i++)
+        {
+            String currWord = s.substring(0, i+1);
+            if(set.contains(currWord))
+            {
+                List<String> ret = fun(s.substring(i+1), set);
+                for(String w : ret)
+                {
+                    if(w.length() == 0)
+                        ans.add(currWord);
+                    else
+                        ans.add(currWord+" "+w);
+                }
+            }
+        }
+        map.put(s, ans);
+        return ans;
+    }
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>(wordDict);
+        List<String> str = new ArrayList<>();
+        return fun(s, set);
+    }
+}
