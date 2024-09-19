@@ -1,0 +1,73 @@
+class Solution {
+    private List<Integer> fun(int i, int j, String express)
+    {
+        if(i > j)
+        {
+            List<Integer> res = new ArrayList<>();
+            return res;
+        }
+        if(i == j)
+        {
+            List<Integer> res = new ArrayList<>();
+            res.add(Integer.parseInt(express.substring(i,i+1)));
+            return res;
+        }
+        List<Integer> res = new ArrayList<>();
+        int flag = 0;
+        for(int k=i; k<=j; k++)
+        {
+            char c = express.charAt(k);
+            if(c == '-' || c == '+' || c == '*')
+            {
+                flag = 1;
+                List<Integer> left = fun(i, k-1, express);
+                List<Integer> right = fun(k+1, j, express);
+                if(left.size() == 0)
+                    res.addAll(right);
+                else if(right.size() == 0)
+                    res.addAll(left);
+                else
+                {
+                    if(c == '-')
+                    {
+                        for(int l : left)
+                        {
+                            for(int r : right)
+                            {
+                                res.add(l-r);
+                            }
+                        }
+                    }
+                    else if(c == '+')
+                    {
+                        for(int l : left)
+                        {
+                            for(int r : right)
+                            {
+                                res.add(l+r);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for(int l : left)
+                        {
+                            for(int r : right)
+                            {
+                                res.add(l*r);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(flag == 0)
+        {
+            res.add(Integer.parseInt(express.substring(i, j+1)));
+        }
+        return res;
+    }
+    public List<Integer> diffWaysToCompute(String expression) {
+        return fun(0, expression.length()-1, expression);
+    }
+}
